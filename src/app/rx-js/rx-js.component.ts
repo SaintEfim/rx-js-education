@@ -1,41 +1,41 @@
 import { AfterViewInit, Component } from '@angular/core';
-import './rx-js-code'
-import { Observable, Subject } from 'rxjs';
+import './rx-js-code' // импортируется внешний код из файла rx-js-code.js
+import { Observable, Subject } from 'rxjs'; // импортируются классы Observable и Subject из пакета rxjs
 
 @Component({
-  selector: 'app-rx-js',
-  templateUrl: './rx-js.component.html',
-  styleUrls: ['./rx-js.component.css']
+  selector: 'app-rx-js', // селектор компонента
+  templateUrl: './rx-js.component.html', // шаблон компонента
+  styleUrls: ['./rx-js.component.css'] // стили компонента
 })
-// Первое решение. Здесь мы выводим в консоль каждый введённый символ. Это решение более правильное
+// Комментарий к первому решению
 // export class RxJsComponent implements AfterViewInit {
 //   ngAfterViewInit(): void {
-//     const val = new Subject();
+//     const val = new Subject(); // создается новый Subject
 
-//     const search=document.getElementById('search');
-//     console.log(search);
-//     search?.addEventListener('input',event=>{
-//       val.next(event);
+//     const search=document.getElementById('search'); // получение элемента с id="search"
+//     console.log(search); // вывод элемента в консоль
+//     search?.addEventListener('input',event=>{ // добавление слушателя на событие ввода данных в поле ввода
+//       val.next(event); // передача события в Subject
 //     })
 
-//     val.subscribe(value=>{
-//       console.log(value)
+//     val.subscribe(value=>{ // подписка на значения Subject
+//       console.log(value) // вывод каждого введенного символа в консоль
 //     })
 //   }
-
 // }
-// Второе решение.
+
+// Комментарий ко второму решению
 export class RxJsComponent implements AfterViewInit{
   ngAfterViewInit(): void {
-    const search$=new Observable(observer=>{
-        const search=document.getElementById('search');
-        search?.addEventListener('input',event=>{
-          observer.next(event);
+    const search$=new Observable(observer=>{ // создание нового Observable
+        const search=document.getElementById('search'); // получение элемента с id="search"
+        search?.addEventListener('input',event=>{ // добавление слушателя на событие ввода данных в поле ввода
+          observer.next(event); // передача события в Observable
         })
     })
 
-    search$.subscribe(value=>{
-      console.log(value);
+    search$.subscribe(value=>{ // подписка на значения Observable
+      console.log(value); // вывод каждого введенного символа в консоль
     })
   }
 }
