@@ -13,7 +13,6 @@ import { Observable, Subject } from 'rxjs'; // импортируются кла
 //     const val = new Subject(); // создается новый Subject
 
 //     const search=document.getElementById('search'); // получение элемента с id="search"
-//     console.log(search); // вывод элемента в консоль
 //     search?.addEventListener('input',event=>{ // добавление слушателя на событие ввода данных в поле ввода
 //       val.next(event); // передача события в Subject
 //     })
