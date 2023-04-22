@@ -1,7 +1,7 @@
 // Импортируем необходимые модули и функции из библиотек
 import { AfterViewInit, Component } from '@angular/core';
 import './rx-js-code'; // Импортируем дополнительный код из другого файла
-import { Observable, debounceTime, distinctUntilChanged, map } from 'rxjs'; // Импортируем функции и классы из RxJS
+import { Observable, debounceTime, distinctUntilChanged, fromEvent, map, takeUntil } from 'rxjs'; // Импортируем функции и классы из RxJS
 
 
 @Component({
@@ -17,21 +17,31 @@ export class RxJsComponent implements AfterViewInit {
     const search$ = new Observable<Event>(observer => {
       // Находим элемент input с идентификатором 'search'
       const search = document.getElementById('search');
-      if (!search) {
+      const stop=document.getElementById('stop');
+      if (!search || !stop){
         observer.error('not find'); // Если элемент не найден, то вызываем ошибку
         return;
       }
       const onSearch=(event: any)=>{
         observer.next(event); // Когда происходит событие ввода, мы вызываем метод next нашего наблюдаемого объекта
+      };
+      
+      const onStop = (event: any)=>{
         observer.complete(); // Вызываем метод complete, если хотим завершить наблюдаемый объект
         clear();
-      };
+      }
+        
+      stop?.addEventListener('click', onStop);
       search?.addEventListener('input',onSearch);
+
       const clear =()=>{
         search?.removeEventListener('input',onSearch);
+        stop?.removeEventListener('click',onStop);
       };
+      
     });
 
+    
     // Используем операторы RxJS для обработки событий ввода
     search$
       .pipe(
@@ -39,7 +49,8 @@ export class RxJsComponent implements AfterViewInit {
           return (event.target as HTMLInputElement).value; // Извлекаем значение из события ввода
         }),
         debounceTime(500), // Игнорируем события ввода, которые происходят быстрее, чем раз в 500 миллисекунд
-        distinctUntilChanged() // Игнорируем повторяющиеся значения
+        distinctUntilChanged(), // Игнорируем повторяющиеся значения
+        takeUntil(search$)
       )
       .subscribe({
         next: value => {
@@ -54,3 +65,4 @@ export class RxJsComponent implements AfterViewInit {
       });
   }
 }
+
