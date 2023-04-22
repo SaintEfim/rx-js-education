@@ -1,3 +1,4 @@
+//Test
 // Импортируем необходимые модули и функции из библиотек
 import { AfterViewInit, Component } from '@angular/core';
 import './rx-js-code'; // Импортируем дополнительный код из другого файла
