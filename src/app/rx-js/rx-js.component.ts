@@ -1,8 +1,8 @@
-//Test
 // Импортируем необходимые модули и функции из библиотек
 import { AfterViewInit, Component } from '@angular/core';
 import './rx-js-code'; // Импортируем дополнительный код из другого файла
 import { Observable, debounceTime, distinctUntilChanged, map } from 'rxjs'; // Импортируем функции и классы из RxJS
+
 
 @Component({
   selector: 'app-rx-js', // Селектор, который определяет, какой элемент DOM будет управлять компонентом
@@ -21,10 +21,15 @@ export class RxJsComponent implements AfterViewInit {
         observer.error('not find'); // Если элемент не найден, то вызываем ошибку
         return;
       }
-      search?.addEventListener('input', event => {
+      const onSearch=(event: any)=>{
         observer.next(event); // Когда происходит событие ввода, мы вызываем метод next нашего наблюдаемого объекта
-        // observer.complete(); // Вызываем метод complete, если хотим завершить наблюдаемый объект
-      });
+        observer.complete(); // Вызываем метод complete, если хотим завершить наблюдаемый объект
+        clear();
+      };
+      search?.addEventListener('input',onSearch);
+      const clear =()=>{
+        search?.removeEventListener('input',onSearch);
+      };
     });
 
     // Используем операторы RxJS для обработки событий ввода
