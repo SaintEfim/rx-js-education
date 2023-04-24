@@ -1,7 +1,7 @@
 // Импортируем необходимые модули и функции из библиотек
 import { AfterViewInit, Component } from '@angular/core';
 import './rx-js-code'; // Импортируем дополнительный код из другого файла
-import { Observable, debounceTime, distinctUntilChanged, fromEvent, map, takeUntil } from 'rxjs'; // Импортируем функции и классы из RxJS
+import { Observable, debounceTime, distinctUntilChanged, fromEvent, map, pairwise, switchMap, takeUntil } from 'rxjs'; // Импортируем функции и классы из RxJS
 
 
 @Component({
@@ -63,6 +63,62 @@ export class RxJsComponent implements AfterViewInit {
           console.log('finish'); // Вызываем, когда наблюдаемый объект завершен
         }
       });
+
+      const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+      // Получаем контекст для рисования на холсте
+      const cx =canvas.getContext('2d');
+      // Если контекст не найден, то вызываем ошибку и прекращаем выполнение кода
+      if (!cx){
+        return;
+      }
+      // Устанавливаем толщину линии
+      cx.lineWidth=4;
+
+      // Интерфейс для представления координат x и y
+  interface Position{
+    x:number;
+    y:number;
+  }
+
+  // Функция для рисования линии на холсте
+  function drawLine([prev,next]:Position[]) {
+    // Начинаем новый путь рисования
+    cx?.beginPath();
+    // Устанавливаем точку начала линии
+    cx?.moveTo(prev.x, prev.y);
+    // Рисуем линию до точки окончания
+    cx?.lineTo(next.x, next.y);
+    // Рисуем контур линии
+    cx?.stroke();
+  }
+  // Создаем поток событий "mousemove" на холсте
+  const mousemove$=fromEvent<MouseEvent>(canvas, 'mousemove');
+  // Создаем поток событий "mousedown" на холсте
+  const mousedown$ =fromEvent<MouseEvent>(canvas, 'mousedown');
+  // Создаем поток событий "mouseup" на холсте
+  const mouseup$ =fromEvent<MouseEvent>(canvas, 'mouseup');
+  // Создаем поток событий "mouseout" на холсте
+  const mouseout$ =fromEvent<MouseEvent>(canvas, 'mouseout');
+
+  // Создаем поток координат мыши событий "mousemove" на холсте
+  const points$=mousemove$.pipe(
+    map<MouseEvent,Position>(({clientX,clientY})=>{
+      // Получаем размеры и позицию холста на странице
+      const {top,left} =canvas.getBoundingClientRect();
+      // Вычисляем координаты относительно холста
+      return {
+        x: clientX-left,
+        y: clientY-top
+      };
+    }),
+    pairwise<Position>()
+  )
+
+  // Создаем поток событий "mousedown", который будет выдавать поток координат points$, пока не произойдет событие "mouseup" или "mouseout"
+  mousedown$.pipe(
+    switchMap(() => points$.pipe(takeUntil(mouseout$),takeUntil(mouseup$)
+    ))
+  ).subscribe(drawLine)
   }
 }
 
