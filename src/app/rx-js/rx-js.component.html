@@ -1,9 +1,50 @@
 <!-- Оптимизируй запросы на сервер в несколько строк с RxJS.
 Когда юзер вводит какие-то данные вместо того, чтобы проверять каждый симвовл мы проверим слово целиком -->
 
-<input type="text" name="s" id="search"> <!-- Поле для ввода поискового запроса, имеющее тип "text", имя "s" и идентификатор "search" -->
-<button id="stop">Stop</button> <!-- Кнопка "Стоп", имеющая идентификатор "stop" -->
-<canvas id ='canvas' width="400px" height="400px" style="border:1px solid red; margin: 50 px;display: flex;"></canvas> <!-- Элемент холста HTML5 для рисования на 
-    странице, имеющий идентификатор "canvas", ширину и высоту 400 пикселей, 
-    красную рамку шириной 1 пиксель и отступом 50 пикселей. Он также имеет стиль "display: flex;", 
-    который позволяет отображать его внутри элемента-контейнера как flex-элемента. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <title>RxJS Полный курс</title>
+</head>
+<body style="padding-top: 3rem;">
+
+    <div class="container">
+
+        <div class="input-field">
+          <h1 style="text-align:center">Поиск пользователей GitHub</h1>
+          <input type="text" id="search_GitHub_API">
+          <label for="search"></label>
+        </div>
+        
+        <div class="row">
+          <div class="col s6 offset-s3" id="result"></div>
+        </div>
+        <div>
+          <h1 style="text-align:center">Работа с Observer</h1>
+          <!-- Оптимизируй запросы на сервер в несколько строк с RxJS.
+          Когда юзер вводит какие-то данные вместо того, чтобы проверять каждый симвовл мы проверим слово целиком -->
+
+          <input type="text" name="s" id="search"> <!-- Поле для ввода поискового запроса, имеющее тип "text", имя "s" и идентификатор "search" -->
+          <button id="stop">Stop</button> <!-- Кнопка "Стоп", имеющая идентификатор "stop" -->
+          <h1 style="text-align:center">Работа с Canvas</h1>
+          <canvas id ='canvas' width="400px" height="400px" style="border:1px solid red; margin: 50 px;display: flex;"></canvas> <!-- Элемент холста HTML5 для рисования на 
+          странице, имеющий идентификатор "canvas", ширину и высоту 400 пикселей, 
+          красную рамку шириной 1 пиксель и отступом 50 пикселей. Он также имеет стиль "display: flex;", 
+          который позволяет отображать его внутри элемента-контейнера как flex-элемента. -->
+        </div>
+    </div>
+    
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+</body>
+</html>
+
