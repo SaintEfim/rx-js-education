@@ -61,7 +61,6 @@ export class RxJsComponent implements AfterViewInit {
         }),
         debounceTime(500), // Игнорируем события ввода, которые происходят быстрее, чем раз в 500 миллисекунд
         distinctUntilChanged(), // Игнорируем повторяющиеся значения
-        takeUntil(search$)
       )
       .subscribe({
         next: value => {
