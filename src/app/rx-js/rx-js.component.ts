@@ -25,12 +25,12 @@ export class RxJsComponent implements AfterViewInit {
       const onSearch=(event: any)=>{
         observer.next(event); // Когда происходит событие ввода, мы вызываем метод next нашего наблюдаемого объекта
       };
-      
+
       const onStop = (event: any)=>{
         observer.complete(); // Вызываем метод complete, если хотим завершить наблюдаемый объект
         clear();
       }
-        
+
       stop?.addEventListener('click', onStop);
       search?.addEventListener('input',onSearch);
 
@@ -38,10 +38,10 @@ export class RxJsComponent implements AfterViewInit {
         search?.removeEventListener('input',onSearch);
         stop?.removeEventListener('click',onStop);
       };
-      
+
     });
 
-    
+
     // Используем операторы RxJS для обработки событий ввода
     search$
       .pipe(
@@ -50,7 +50,6 @@ export class RxJsComponent implements AfterViewInit {
         }),
         debounceTime(500), // Игнорируем события ввода, которые происходят быстрее, чем раз в 500 миллисекунд
         distinctUntilChanged(), // Игнорируем повторяющиеся значения
-        takeUntil(search$)
       )
       .subscribe({
         next: value => {
