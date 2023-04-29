@@ -1,7 +1,18 @@
 // Импортируем необходимые модули и функции из библиотек
 import { AfterViewInit, Component } from '@angular/core';
+import {ajax} from "rxjs/internal/ajax/ajax";
 import './rx-js-code'; // Импортируем дополнительный код из другого файла
-import { Observable, debounceTime, distinctUntilChanged, fromEvent, map, pairwise, switchMap, takeUntil } from 'rxjs'; // Импортируем функции и классы из RxJS
+import {
+  Observable,
+  debounceTime,
+  distinctUntilChanged,
+  fromEvent,
+  map,
+  pairwise,
+  switchMap,
+  takeUntil,
+  from
+} from 'rxjs'; // Импортируем функции и классы из RxJS
 
 
 @Component({
@@ -25,12 +36,12 @@ export class RxJsComponent implements AfterViewInit {
       const onSearch=(event: any)=>{
         observer.next(event); // Когда происходит событие ввода, мы вызываем метод next нашего наблюдаемого объекта
       };
-      
+
       const onStop = (event: any)=>{
         observer.complete(); // Вызываем метод complete, если хотим завершить наблюдаемый объект
         clear();
       }
-        
+
       stop?.addEventListener('click', onStop);
       search?.addEventListener('input',onSearch);
 
@@ -38,10 +49,10 @@ export class RxJsComponent implements AfterViewInit {
         search?.removeEventListener('input',onSearch);
         stop?.removeEventListener('click',onStop);
       };
-      
+
     });
 
-    
+
     // Используем операторы RxJS для обработки событий ввода
     search$
       .pipe(
@@ -119,6 +130,22 @@ export class RxJsComponent implements AfterViewInit {
     switchMap(() => points$.pipe(takeUntil(mouseout$),takeUntil(mouseup$)
     ))
   ).subscribe(drawLine)
+    const url = 'https://api.github.com/search/users?q='
+  const search_GitHub_API:HTMLElement|null=document.getElementById('search_GitHub_API')!;
+
+  const stream$=fromEvent(search_GitHub_API,'input')
+    .pipe(
+      map(event => { return (event.target as HTMLInputElement).value; }),
+      debounceTime(500), // Игнорируем события ввода, которые происходят быстрее, чем раз в 500 миллисекунд
+      distinctUntilChanged(), // Игнорируем повторяющиеся значения
+      switchMap(y=>{return ajax.getJSON(url+y)}),
+      map(result=>{
+        return result.items;
+      } )
+    );
+  stream$.subscribe(value => {
+    console.log(value);
+  })
   }
 }
 
